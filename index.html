@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        background-color: #F3EEEA;
+        text-align: center;
+    }
+    
+    #form {
+        width: 60%;
+        margin: auto;
+    }
+    
+    button {
+        background-color: #B99470;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin: auto;
+    }
+    
+    img {
+        width: 100%;
+    }
+    
+    input {
+        width: 90%;
+        background-color: transparent;
+        padding: 10px;
+        margin: 20px;
+        border: #A4907C solid 2px;
+    }
+    
+    input:hover {
+        box-shadow: 0 0 10px #B99470;
+    }
+    
+    .data {
+        background-color: #A4907C;
+        margin: 30px;
+        width: 250px;
+        padding: 30px;
+        color: #EBE3D5;
+    }
+    
+    #box {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    h1 {
+        text-align: center;
+    }
+    
+    p {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <form action="" id="form">
+        <input type="text" id="title">
+        <input type="text" id="img">
+        <input type="number" id="price">
+        <input type="submit">
+
+    </form>
+    <div id="box"></div>
+</body>
+<script>
+    let product = JSON.parse(localStorage.getItem('data')) || [];
+    console.log("product", product);
+
+    const uimaker = () => {
+        document.getElementById("box").innerHTML = "";
+        product.map((ele, i) => {
+
+            let title = document.createElement("h1");
+            title.innerHTML = ele.title;
+
+            let img = document.createElement("img");
+            img.src = ele.img;
+
+            let price = document.createElement("p");
+            price.innerHTML = ele.price;
+
+            let dtl = document.createElement("button");
+            dtl.innerHTML = "delete"
+
+            dtl.addEventListener("click", () => {
+                product.splice(i, 1)
+                uimaker();
+                localStorage.setItem('data', JSON.stringify(product));
+
+
+
+            })
+
+
+
+            let div = document.createElement("div");
+            div.append(img, title, price, dtl);
+
+            div.setAttribute("class", "data");
+
+
+
+
+
+            document.getElementById("box").append(div);
+        });
+    };
+    uimaker();
+
+    const handleData = (e) => {
+        e.preventDefault();
+        let data = {
+            title: document.getElementById('title').value,
+            img: document.getElementById('img').value,
+            price: document.getElementById('price').value,
+        };
+
+        product.push(data);
+        localStorage.setItem('data', JSON.stringify(product));
+        uimaker();
+    };
+
+    document.getElementById("form").addEventListener("submit", handleData);
+</script>
+
+</html>
